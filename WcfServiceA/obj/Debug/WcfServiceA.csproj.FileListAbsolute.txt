@@ -1,0 +1,6 @@
+c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\bin\Debug\WcfServiceA.exe.config
+c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\bin\Debug\WcfServiceA.exe
+c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\bin\Debug\WcfServiceA.pdb
+c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\obj\Debug\WcfServiceA.exe
+c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\obj\Debug\WcfServiceA.pdb
+c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\obj\Debug\WcfServiceA.csprojResolveAssemblyReference.cache
