@@ -24,14 +24,32 @@ namespace WcfServiceA
      * During development we can configure the service to return more detailed exception information.
      */
     IncludeExceptionDetailInFaults = true,
-     /*
-      *
-      * 
-      * 
-      */ 
+    /*
+     *    ConcurrencyMode = ConcurrencyMode.Multiple/Reenterant/Single
+     *    Multiple - allows multiple threads to call into the service - must manually assure thread safty.
+     *    Reenterent - allows one thread to call into the service and queues the rest.
+     *    allows interupts for the service to call out durring execution.
+     *    Single -allows one thread to call into the service and queues the rest.
+     *    the service must complete its action and cannot call out.
+     */
     ConcurrencyMode = ConcurrencyMode.Multiple,
     /*
-     * 
+     * Important note about UseSynchronizationContext beahvior!!!!!
+     * if UseSynchronizationContext = true
+     * then the value from the System.Threading.SynchronizationContext.
+     * Current is read and cached so that when a request
+     * comes to the service, the host can marshal the request onto the
+     * thread that the host was created on using the cached SynchronizationContext.
+     * If you try to host a service in, for example,
+     * a WPF application and also call that service from the same thread in the WPF application, 
+     * you will notice that you get a deadlock when the client tries to call the service.
+     * The reason for this is that the default value of the UseSynchronizationContext is 
+     * true and so when you create the ServiceHost on the UI thread of the WPF application,
+     * then the current synchronization context is a DispatcherSynchronizationContext which
+     * holds a reference to a System.Windows.Threading.Dispatcher
+     * object which then holds a reference to the current thread. 
+     * The DispatcherSynchronizationContext will then be used when a request comes in to marshal requests onto the UI thread.
+     * But if you are calling the service from the UI thread then you have a deadlock when it tries to do this.
      */
     UseSynchronizationContext = true)]
     public partial class ServiceA : IServiceA, IDisposable
@@ -107,7 +125,7 @@ namespace WcfServiceA
         {
             IServiceAEvents newClient =
                 OperationContext.Current.GetCallbackChannel<IServiceAEvents>();
-
+       
             if (!mCallbackList.Contains(newClient))
             {
                 mCallbackList.Add(newClient);
@@ -150,6 +168,7 @@ namespace WcfServiceA
                  * SOAP fault messages, which convey the failure semantics and additional information associated with the failure (such
                  * as the reason).
                  */
+
                 throw new FaultException("We broke over here...");
            
             }
