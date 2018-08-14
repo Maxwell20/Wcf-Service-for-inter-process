@@ -3,4 +3,4 @@ c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\b
 c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\bin\Debug\WcfServiceA.pdb
 c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\obj\Debug\WcfServiceA.exe
 c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\obj\Debug\WcfServiceA.pdb
-c:\users\mtwente\documents\visual studio 2015\Projects\WcfServiceA\WcfServiceA\obj\Debug\WcfServiceA.csprojResolveAssemblyReference.cache
+C:\Users\mtwente\Documents\Visual Studio 2015\Projects\WcfServiceA\WcfServiceA\obj\Debug\WcfServiceA.csprojResolveAssemblyReference.cache

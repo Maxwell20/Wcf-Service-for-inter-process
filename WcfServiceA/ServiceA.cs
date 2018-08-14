@@ -19,11 +19,24 @@ namespace WcfServiceA
      * PerSession - for every client a new intance of the service is created.
      */
     InstanceContextMode = InstanceContextMode.Single,
-    IncludeExceptionDetailInFaults = true, 
+    /*
+     * For security purpose, an exception message doesn’t contain any information about the actual exception.
+     * During development we can configure the service to return more detailed exception information.
+     */
+    IncludeExceptionDetailInFaults = true,
+     /*
+      *
+      * 
+      * 
+      */ 
     ConcurrencyMode = ConcurrencyMode.Multiple,
+    /*
+     * 
+     */
     UseSynchronizationContext = true)]
     public partial class ServiceA : IServiceA, IDisposable
     {
+        private int mServiceData = 0;
         private bool mExitNow = false;
         private int mSleepTime = 3000;
         private static List<IServiceAEvents> mCallbackList = new List<IServiceAEvents>();
@@ -113,10 +126,51 @@ namespace WcfServiceA
 
         public int GetValue()
         {
-            Random rnd = new Random();
-            int value = rnd.Next(1, 6);
-            Console.WriteLine("Recieved request from client.");
-            return value;
+            try
+            {
+                Random rnd = new Random();
+                int value = rnd.Next(1, 6);
+                Console.WriteLine("Recieved request from client.");
+                //throw new Exception("We broke here.");
+                return value;
+            }
+            //if an exception goes unhandled the service will become faulted.
+            catch(Exception ex)
+            {
+                Console.WriteLine("Exception was thrown in the service: " + ex.Message);
+                /*
+                 * throw fault exception back to the client.
+                 * Use FaultException Class to customize the Error Message the service returns.
+                 * Clients can’t distinguish types of faults
+                 * Use FaultCode to specify a SOAP fault code
+                 * Use FaultReason to specify the description of the fault. It supports locale based translation of message
+                 * Use a fault exception in order to prevent the client from thinking the service is faulted.
+                 * WCF does not communicate CLR Exceptions.
+                 * WCF Exceptions are passed as SOAP Messages. The underlying principle of service-oriented error handling consists of
+                 * SOAP fault messages, which convey the failure semantics and additional information associated with the failure (such
+                 * as the reason).
+                 */
+                throw new FaultException("We broke over here...");
+           
+            }
+        }
+
+        public void GetValueAsnyc()
+        {
+            Console.WriteLine("Calcualting something difficult...");
+            Thread.Sleep(5000);
+            Console.WriteLine("All done! - Lets tell everyone...");
+
+            foreach (IServiceAEvents client in mCallbackList)
+            {
+                client.SendValueBack("All done here...");
+            }
+        }
+
+        public void UpdateService(int serviceData)
+        {
+            mServiceData = serviceData;
+            Console.WriteLine("Service was updated by client: " + serviceData);
         }
     }
 }

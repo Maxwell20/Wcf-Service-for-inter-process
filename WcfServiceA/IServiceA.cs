@@ -10,8 +10,20 @@ using System.Threading.Tasks;
 
 namespace WcfServiceA
 {
-
-    [ServiceContract(CallbackContract = typeof(IServiceAEvents))]
+    /*•	
+     * Service Contract describes what the service can do.
+     *  It defines some properties about the service,
+     *  and a set of actions called Operation Contracts.
+     *  Operation Contracts are equivalent to web methods.
+     */
+    [ServiceContract(CallbackContract = typeof(IServiceAEvents)  
+     /*,CallbackContract = property specifies the return contract in a two - way(duplex) conversation,
+     ConfigurationName = property specifies the name of the service element in the configuration file to use,
+     Name/Namespace = properties control the name and namespace of the contract in the WSDL<portType> element.
+     SessionMode = property specifies whether the contract requires a binding that supports sessions,
+     ProtectionLevel = ProtectionLevel properties indicate whether
+     all messages supporting the contract have a explicit ProtectionLevel value, and if so, what that level is*/
+     )]
     public interface IServiceA
     {
         [OperationContract(IsOneWay = true)]
@@ -19,8 +31,27 @@ namespace WcfServiceA
 
         [OperationContract(IsOneWay = true)]
         void DeregisterClient(IServiceAEvents client);
+
+
+        //There are three types of Message Exchange Patterns:
+        /*
+         * Request/Reply - Client sends a message to the service
+         * and waits for the service to send the message back.
+         */
         [OperationContract(IsOneWay = false)]
         int GetValue();
+        /*
+         * Duplex - Client and Service can initiate communication by sending a message to each other.
+         * Use when service needs to notify the client that it finished processing an operation or when
+         * service can publish events to which client can subscribe.
+         */
+        [OperationContract(IsOneWay = true)]
+        void GetValueAsnyc();
+        /*
+         * One way - Client sends a message to the service and doesn’t wait for the reply.
+         */
+        [OperationContract(IsOneWay = true)]
+        void UpdateService(int serviceData);
     }
 
 
@@ -29,6 +60,9 @@ namespace WcfServiceA
     {
         [OperationContract(IsOneWay = true)]
         void SendStatus(int status);
+
+        [OperationContract(IsOneWay = true)]
+        void SendValueBack(string callbackStr);
     }
 
     public static class ConnectionFactory
